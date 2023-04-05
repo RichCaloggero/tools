@@ -3,8 +3,13 @@
 <head>
 <meta charset="utf-8">
 <title>Create Table</title>
+<style>
+#status {position: fixed;}
+</style>
 </head>
 <body>
+<div id="status" role="status"></div>
+
 <h1>Create Accessible Table From Excel</h1>
 
 <label>Data (tab separated; copy / paste from excel):
@@ -20,13 +25,15 @@
 <br><button id="convert">Convert</button>
 
 <hr>
+<details>
+<summary><h2>HTML</h2></summary>
 <br><label>Results:
 <br><textarea id="html" rows="10" cols="80"></textarea>
 </label>
-
-<div id="status" role="status"></div>
+</details>
 
 <hr><div id="dom"></div>
+
 
 <script>
 const data = $("#data");
