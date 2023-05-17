@@ -12,7 +12,9 @@
 
 <h1>Create Review Completed EMail</h1>
 
-<div id="template">
+
+<label for="template">Template</label>
+<br><textarea id="template" readonly rows="15" cols="80">
 We have completed our accessibility review of [Web site name] and have listed the issues found in MIT's instance of Github. Our review of [url of site reviewed] took place between [start dates] and [end dates] and included an assessment of the home page and spot checking of other portions of the site using a screen reader (NVDA on windows and voiceover on Mac), the keyboard to navigate, the WAVE automated tool, the ANDI automated tool, and WCAG 2.1 AA guidelines. This was not a comprehensive review of every page on the site and was our assessment of the web site accessibility at this time. If updates are made to the underlying technology or to the content that could affect the accessibility, you may contact us to request an additional review. 
 
 The accessibility issues identified can be found at [url for issues list]. To provide you access to that list, you will need to join MIT's instance of Github. Once you have set up your account, please forward your user name and we will provide access. 
@@ -21,35 +23,55 @@ We use the Github repository as a way to answer questions about the issues and t
 
 If you have any questions about the process, please let me know.
 
-</div>
+</textarea>
+
+<p><label>Edit Template <input type="checkbox" id="edit-template" accesskey="e"></label></p>
 
 <hr><div id="fields">
 </div>
 
 <p><button id="submit">Submit</button></p>
 
-<hr><textarea id="message-text" rows="20" cols="80"></textarea>
+<label for="message-text">Message</label>
+<hr><textarea id="message-text" rows="15" cols="80"></textarea>
 
 <script>
-template = $("#template");
-messageText = $("#message-text");
-substitutions = [...template.textContent.matchAll(
+const template = $("#template");
+const messageText = $("#message-text");
+const fields = $("#fields");
+let substitutions = processTemplate(template.value, fields);
+
+$("#edit-template").addEventListener("change", e => {
+template.readOnly = !e.target.checked;
+e.target.checked? template.focus() : processTemplate(template.value, fields);
+}); // edit
+
+$("#submit").addEventListener("click", () => {
+$("#message-text").value = createMessageText(fields, substitutions, template.value)
+$("#message-text").focus();
+});
+
+
+
+function processTemplate (template, container) {
+const substitutions = [...template.matchAll(
 /\[(.+?)\]/g
 )]; // matches
-defaults = {};
 
+container.innerHTML = "";
 for (let s of substitutions) {
-createField(s[1], fields);
+createField(s[1], container);
 } // for
 
-$("#submit").addEventListener("click", () => $("#message-text").value = createMessageText(fields, substitutions, template.textContent));
-
+if (container.children.length > 0) $("input", container).focus();
+return substitutions;
+} // processTemplate
 
 
 function createField (label, container) {
 container.insertAdjacentHTML(
 "beforeEnd",
-`<label>${label} <input type="text" name="${createIdentifier(label)}" value="${defaults[createIdentifier(label)] || ""}"></label><br><br>\n`
+`<label>${label} <input type="text" name="${createIdentifier(label)}"></label><br><br>\n`
 ); // html
 } // createField
 
@@ -67,10 +89,12 @@ result = substitute(value, result, match);
 return result;
 } // createMessageText
 
-function substitute (value, text, match) {
+function substitute (value, text, match = {}) {
+if (!value) value = "<no data>";
 const index = match.index;
 const leading = index > 0? text.slice(0, index) : "";
 const trailing = index < text.length-1? text.slice(index + match[0].length) : "";
+console.log("substitute: ", value, " ", index);
 
 //debugger;
 return leading + value + trailing;
