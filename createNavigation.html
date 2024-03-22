@@ -26,7 +26,7 @@
 <h2>HTML</h2>
 <code><pre id="html"></pre></code>
 
-<script src="importMenuData.js"></script>
+<script src="createNavigation.js"></script>
 
 <script>
 const $nav = document.querySelector("nav");
@@ -56,10 +56,6 @@ e.target.setAttribute("aria-expanded", menu.hidden? "false" : "true");
 } // clickHandler
 
 } // run
-
-function createNavigation (data, headingLevel = 0) {
-return tree2html(importTreeData(data), headingLevel);
-} // createNavigation
 
 
 function not (x) {return !x;}

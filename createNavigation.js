@@ -1,17 +1,18 @@
+(function () {
 const noOp = () => {};
 const debug = console.log;
 const nextInteger = gen();
 
-function importTreeData (data) {
+function createNavigation(data, headingLevel = 0) {
 /* a line ends with <lf>
 - a line begins with a number indicating tree level (distance from root node beginning with 0)
 */
 
 var lines = data.split ("\n");
 
-return	importTree(lines, 0);
+return	tree2html(importTree(lines), headingLevel);
 
-function importTree (lines, depth) {
+function importTree (lines, depth = 0) {
 //debug("importTree at depth ", depth);
 var data = null;
 var line = "";
@@ -44,6 +45,9 @@ tree.push(node = {level, label, href});
 } else if (level === depth+1) {
 lines.unshift(line);
 node.children = importTree(lines, depth+1);
+} else if (level < depth) {
+lines.unshift(line);
+break;
 } // if
 
 line = getNextLine ();
@@ -128,4 +132,6 @@ yield count;
 } // while
 } // gen
 
+window.createNavigation = createNavigation;
+})(window);
 
