@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Top Level Links with Submenus</title>
+</head>
+<body>
+<h1>Top Level Links with Submenus</h1>
+<nav>
+</nav>
+<hr>
+<label>Menu data:<br>
+<textarea id="data">
+0 about = about.html
+1 history = history.html
+1 research
+2 computer science
+2 bioinfomatics
+0 contact us
+</textarea></label>
+<div>
+<label>Starting heading level (0 to omit): <input id="heading-level" type="range" min="0" max="6" value="0"></label>
+<button id="run">Run</button></div>
+
+<hr>
+<h2>HTML</h2>
+<code><pre id="html"></pre></code>
+
+<script src="importMenuData.js"></script>
+
+<script>
+const $nav = document.querySelector("nav");
+$headingLevel = document.querySelector("#heading-level");
+$run = document.querySelector("#run");
+$run.addEventListener("click", () => run());
+run();
+
+
+function run () {
+const html = createNavigation(document.querySelector("#data").value, Number($headingLevel.value));
+document.querySelector("#html").textContent = html;
+$nav.innerHTML = html;
+
+/*$submenus = document.querySelectorAll("ul > ul");
+$submenus.forEach(x => x.setAttribute("hidden", ""));
+$nav.addEventListener("click", e => {
+if (e.target instanceof HTMLButtonElement) {
+e.preventDefault();
+const menu = e.target.nextElementSibling;
+menu.hidden = not(menu.hidden);
+e.target.setAttribute("aria-expanded", menu.hidden? "false" : "true");
+} // if
+});
+*/
+} // run
+
+function createNavigation (data, headingLevel = 0) {
+return tree2html(importTreeData(data), headingLevel);
+} // createNavigation
+
+
+function not (x) {return !x;}
+
+</script>
+
+</body>
+</html>
