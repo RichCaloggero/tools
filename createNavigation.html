@@ -10,7 +10,7 @@
 </nav>
 <hr>
 <label>Menu data:<br>
-<textarea id="data">
+<textarea id="data" rows="20" cols="80">
 0 about = about.html
 1 history = history.html
 1 research
@@ -45,17 +45,16 @@ $submenus = document.querySelectorAll("ul ul");
 $submenus.forEach(x => x.setAttribute("hidden", ""));
 $nav.removeEventListener("click", clickHandler);
 $nav.addEventListener("click", clickHandler);
+} // run
 
 function clickHandler (e) {
 if (e.target instanceof HTMLButtonElement) {
 e.preventDefault();
-const menu = e.target.nextElementSibling;
+const menu = e.target.parentElement instanceof HTMLLIElement? e.target.nextElementSibling  : e.target.parentElement.nextElementSibling;
 menu.hidden = not(menu.hidden);
 e.target.setAttribute("aria-expanded", menu.hidden? "false" : "true");
 } // if
 } // clickHandler
-
-} // run
 
 
 function not (x) {return !x;}

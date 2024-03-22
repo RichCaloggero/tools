@@ -17,8 +17,6 @@ function importTree (lines, depth = 0) {
 //debug("importTree at depth ", depth);
 var data = null;
 var line = "";
-var split = /^([\d]*)(.*)$/;
-var parseLabel = /[ ]*=[ ]*/;
 var level = 0;
 var label = "";
 var href = null;
@@ -28,17 +26,7 @@ var tree = [];
 line = getNextLine ();
 while (line) {
 //debug ("importNode from", line, " at depth ", depth);
-data = line.match (split);
-level = Number(data[1]), label = data[2];
-//debug(`- level=${level}; label=${label}\n`);
-
-data = label.split(parseLabel);
-//debug("- href: ", data);
-
-if (data.length > 1) {
-label = data[0];
-href = data[1];
-} // if
+[level, label, href] = parseLine(line);
 
 if (level === depth) {
 tree.push(node = {level, label, href});
@@ -56,7 +44,14 @@ line = getNextLine ();
 
 //debug ("- returning depth=", depth, "; ", tree);
 return tree;
+} // importTree
 
+function parseLine (line) {
+const splitLine = /^([\d]*)([^=]*)=*(.*)$/;
+let data = line.match(splitLine);
+const level = (data[1] || 0), label = data[2], href = data[3];
+return [Number(level), label, href];
+} // parseLine
 
 function getNextLine () {
 var line = null;
@@ -68,7 +63,6 @@ line = lines.shift().trim();
 return line;
 } // getNextLine
 
-} // importTree
 
 } // importTreeData
 
@@ -88,6 +82,7 @@ ${tree2html(node.children, headingLevel+1)}
 } // node2html
 
 function menuTrigger (label, headingLevel, href) {
+//debug(`trigger: ${label}, ${href}, ${headingLevel}\n`);
 const id = `${idPrefix}-${nextInteger.next().value}`;
 let labelId, link = "";
 if (href) {
