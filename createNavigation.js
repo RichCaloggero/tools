@@ -2,6 +2,7 @@
 const noOp = () => {};
 const debug = console.log;
 const nextInteger = gen();
+const idPrefix = "nav-link-label";
 
 function createNavigation(data, headingLevel = 0) {
 /* a line ends with <lf>
@@ -87,7 +88,7 @@ ${tree2html(node.children, headingLevel+1)}
 } // node2html
 
 function menuTrigger (label, headingLevel, href) {
-const id = `link-${nextInteger.next().value}`;
+const id = `${idPrefix}-${nextInteger.next().value}`;
 let labelId, link = "";
 if (href) {
 labelId = id;
