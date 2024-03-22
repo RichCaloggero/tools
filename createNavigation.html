@@ -41,17 +41,20 @@ const html = createNavigation(document.querySelector("#data").value, Number($hea
 document.querySelector("#html").textContent = html;
 $nav.innerHTML = html;
 
-/*$submenus = document.querySelectorAll("ul > ul");
+$submenus = document.querySelectorAll("ul ul");
 $submenus.forEach(x => x.setAttribute("hidden", ""));
-$nav.addEventListener("click", e => {
+$nav.removeEventListener("click", clickHandler);
+$nav.addEventListener("click", clickHandler);
+
+function clickHandler (e) {
 if (e.target instanceof HTMLButtonElement) {
 e.preventDefault();
 const menu = e.target.nextElementSibling;
 menu.hidden = not(menu.hidden);
 e.target.setAttribute("aria-expanded", menu.hidden? "false" : "true");
 } // if
-});
-*/
+} // clickHandler
+
 } // run
 
 function createNavigation (data, headingLevel = 0) {
