@@ -6,7 +6,13 @@
 
 <style>
 nav ul {list-style-type: none;}
+
+nav > ul.horizontal > li{
+display: inline-block;
+margin-right: 10px;
+}
 </style>
+
 </head>
 <body>
 <h1>Top Level Links with Submenus</h1>
@@ -26,8 +32,10 @@ about = about.html
 contact us
 </textarea></label>
 <div>
+<label>Horizontal: <input id="horizontal" type="checkbox"></label>
 <label>Starting heading level (0 to omit): <input id="heading-level" type="range" min="0" max="6" value="0"></label>
-<button id="run">Run</button></div>
+</div>
+<button id="run">Run</button>
 
 <hr>
 <h2>HTML</h2>
@@ -39,6 +47,13 @@ contact us
 const $nav = document.querySelector("nav");
 $headingLevel = document.querySelector("#heading-level");
 $run = document.querySelector("#run");
+$horizontal = document.querySelector("#horizontal");
+
+$horizontal.addEventListener("change", e => {
+document.querySelector("nav > ul").classList.toggle("horizontal");
+});
+
+
 $run.addEventListener("click", () => run());
 run();
 

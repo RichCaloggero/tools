@@ -77,7 +77,7 @@ return `<ul>${tree.map(node2html).join("\n")}</ul>
 function node2html (node) {
 return  `<li>${node.children?
 `${menuTrigger(node.label, headingLevel, node.href)}
-${tree2html(node.children, headingLevel+1)}
+${tree2html(node.children, headingLevel > 0? headingLevel+1 : 0)}
 ` : link(node.label, node.href)}</li>`;
 } // node2html
 
